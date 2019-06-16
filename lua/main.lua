@@ -10,7 +10,7 @@
 
 -- Load plugin library
 local materialDesignButtons = require "plugin.materialdesignbuttons"
-materialDesignButtons.initHooks()
+-- materialDesignButtons.initHooks()
 
 local widget = require "widget"
 
