@@ -36,23 +36,44 @@ local bg = display.newRect( screenCX, screenCY, screenAW, screenAH )
 bg:setFillColor( 1 )
 
 
-local button = widget.newButton({
+local button; button = widget.newButton({
 	x = screenCX,
-	y = screenCY,
+	y = screenCY - 40,
     shape = "roundedRect",
 	label = "BUTTON",
     width = 120,
     height = 40,
     font = "Roboto-Medium.ttf",
     cornerRadius = 4,
+    onRelease = function ()
+        print(button.z)
+        button.z = button.z + 1
+        print(button.z)
+    end,
+    labelColor = { default={ 1 }, over={ 1 } }, 
+    fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
+})
+
+
+button.z = 1
+
+
+local button = widget.newButton({
+    x = screenCX,
+    y = screenCY + 40,
+    shape = "roundedRect",
+    label = "BUTTON",
+    width = 120,
+    height = 40,
+    font = "Roboto-Medium.ttf",
+    cornerRadius = 4,
+    hideShadow = true,
     labelColor = { default={ 1 }, over={ 1 } }, 
     fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
 })
 
 
 button.z =10
-
-display.newRect( 0, 0, 10, 10 ).z = 50
 
 
 
