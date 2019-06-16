@@ -53,17 +53,16 @@ local button; button = widget.newButton({
     onEvent = function( event )
         -- print( "onEvent", event )
         if event.phase == "ended" then
-            -- button.z = button.z + 1
+            button.z = button.z + 1
         end
     end,
     onPress = function( event )
         print( "onPress",event )
     end,
-    hideShadow = true,
+    -- hideShadow = true,
     labelColor = { default={ 1 }, over={ 1 } },
     fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
 })
-
 
 -- button.z = 10
 

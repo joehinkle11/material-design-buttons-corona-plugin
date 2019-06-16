@@ -34,35 +34,33 @@ lib.newButton = function( params )
     params.onPress = nil
     params.onEvent = function( event )
         if ( event.phase == "began" ) then
-            -- transition.cancel(effectCanvas)
-            -- transition.cancel(effectTransition)
-            -- effectCanvas.alpha = 0
-            -- effectCanvas.fill.effect.circleRadius = 0
-            -- local desiredRadius = 200 * 15
-            -- effectTransition = transition.to( effectCanvas.fill.effect, {time=80000,circleRadius=desiredRadius/shortestSide} )
-            -- transition.to( effectCanvas, {time=1000,alpha=.3} )
-            -- local x, y = event.target:contentToLocal( event.x, event.y )
-            -- effectCanvas.startX, effectCanvas.startY = x, y
-            -- effectCanvas.fill.effect.xY = {-x,-y}
+            transition.cancel(effectCanvas)
+            transition.cancel(effectTransition)
+            effectCanvas.alpha = 0
+            effectCanvas.fill.effect.circleRadius = 0
+            local desiredRadius = 200 * 15
+            effectTransition = transition.to( effectCanvas.fill.effect, {time=80000,circleRadius=desiredRadius/shortestSide} )
+            transition.to( effectCanvas, {time=1000,alpha=.3} )
+            local x, y = effectCanvas:contentToLocal( event.x, event.y )
+            effectCanvas.startX, effectCanvas.startY = x, y
+            effectCanvas.fill.effect.xY = {-x,-y}
             if oldOnPress then oldOnPress( event ) end
         elseif ( event.phase == "moved" ) then
-            -- local x, y = event.target:contentToLocal( event.x, event.y )
-            -- effectCanvas.fill.effect.xY = {-(x + effectCanvas.startX)*.5,-(y + effectCanvas.startY)*.5}
+            local x, y = effectCanvas:contentToLocal( event.x, event.y )
+            effectCanvas.fill.effect.xY = {-(x + effectCanvas.startX)*.5,-(y + effectCanvas.startY)*.5}
         elseif ( event.phase == "ended" ) then
-            -- local x, y = event.target:contentToLocal( event.x, event.y )
-            -- transition.cancel( effectCanvas )
-            -- transition.cancel( effectTransition )
-            -- local desiredRadius = 200 * 15
-            -- effectTransition = transition.to( effectCanvas.fill.effect, {time=3000,circleRadius=desiredRadius/shortestSide} )
-            -- transition.to( effectCanvas, {time=30,alpha=.5} )
-            -- transition.to( effectCanvas, {time=30,delay=100,alpha=.3} )
-            -- transition.to( effectCanvas, {time=300,delay=300,alpha=0} )
+            transition.cancel( effectCanvas )
+            transition.cancel( effectTransition )
+            local desiredRadius = 200 * 15
+            effectTransition = transition.to( effectCanvas.fill.effect, {time=3000,circleRadius=desiredRadius/shortestSide} )
+            transition.to( effectCanvas, {time=30,alpha=.5} )
+            transition.to( effectCanvas, {time=30,delay=100,alpha=.3} )
+            transition.to( effectCanvas, {time=300,delay=300,alpha=0} )
             if oldOnRelease then oldOnRelease( event ) end
         elseif ( event.phase == "cancelled" ) then
-            -- local x, y = event.target:contentToLocal( event.x, event.y )
-            -- transition.cancel( effectCanvas )
-            -- transition.cancel( effectTransition )
-            -- transition.to( effectCanvas, {time=300,alpha=0} )
+            transition.cancel( effectCanvas )
+            transition.cancel( effectTransition )
+            transition.to( effectCanvas, {time=300,alpha=0} )
         end
         if oldOnEvent then oldOnEvent( event ) end
     end
@@ -109,8 +107,10 @@ lib.newButton = function( params )
 			setmetatable( button, {
 				__index = function( myTable, key )
 					if key == "z" then
-						return rawZ
-					else
+                        return rawZ
+                    elseif key == "contentBounds" then
+                        return shape.contentBounds
+                    else
 						return oldIndex( myTable, key )
 					end
 				end,
