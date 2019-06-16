@@ -46,18 +46,20 @@ local button; button = widget.newButton({
     font = "Roboto-Medium.ttf",
     cornerRadius = 4,
     -- z = 10,
-    -- onRelease = function ( event )
-    --     print( "onRelease",event )
-    --     -- button.z = button.z + 1
-    -- end,
+    onRelease = function ( event )
+        print( "onRelease",event )
+        -- button.z = button.z + 1
+    end,
     onEvent = function( event )
+        -- print( "onEvent", event )
         if event.phase == "ended" then
-            button.z = button.z + 1
+            -- button.z = button.z + 1
         end
     end,
-    -- onPress = function( event )
-    --     print( "onPress",event )
-    -- end,
+    onPress = function( event )
+        print( "onPress",event )
+    end,
+    hideShadow = true,
     labelColor = { default={ 1 }, over={ 1 } },
     fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
 })

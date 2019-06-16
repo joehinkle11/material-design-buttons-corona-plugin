@@ -15,57 +15,72 @@ shaders.load()
 
 local oldNewButton = widget.newButton
 lib.newButton = function( params )
-	-- create button with params using Corona's default API
-	local button = oldNewButton( params )
+    -- localize button that will be created
+    local button
 
     -- create material click effect canvas
     local effectCanvas = shapes.new( params )
-    local shortestSide = math.min(button.width,button.height)
+    local shortestSide
     effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
     effectCanvas.fill.effect = "filter.materialDesignButtons.button"
     effectCanvas.fill.effect.xY = {0,0}
     effectCanvas.fill.effect.circleRadius = 0
+
+    local oldOnRelease = params.onRelease
+    local oldOnPress = params.onPress
+    local oldOnEvent = params.onEvent
+    local effectTransition
+    params.onRelease = nil
+    params.onPress = nil
+    params.onEvent = function( event )
+        if ( event.phase == "began" ) then
+            -- transition.cancel(effectCanvas)
+            -- transition.cancel(effectTransition)
+            -- effectCanvas.alpha = 0
+            -- effectCanvas.fill.effect.circleRadius = 0
+            -- local desiredRadius = 200 * 15
+            -- effectTransition = transition.to( effectCanvas.fill.effect, {time=80000,circleRadius=desiredRadius/shortestSide} )
+            -- transition.to( effectCanvas, {time=1000,alpha=.3} )
+            -- local x, y = event.target:contentToLocal( event.x, event.y )
+            -- effectCanvas.startX, effectCanvas.startY = x, y
+            -- effectCanvas.fill.effect.xY = {-x,-y}
+            if oldOnPress then oldOnPress( event ) end
+        elseif ( event.phase == "moved" ) then
+            -- local x, y = event.target:contentToLocal( event.x, event.y )
+            -- effectCanvas.fill.effect.xY = {-(x + effectCanvas.startX)*.5,-(y + effectCanvas.startY)*.5}
+        elseif ( event.phase == "ended" ) then
+            -- local x, y = event.target:contentToLocal( event.x, event.y )
+            -- transition.cancel( effectCanvas )
+            -- transition.cancel( effectTransition )
+            -- local desiredRadius = 200 * 15
+            -- effectTransition = transition.to( effectCanvas.fill.effect, {time=3000,circleRadius=desiredRadius/shortestSide} )
+            -- transition.to( effectCanvas, {time=30,alpha=.5} )
+            -- transition.to( effectCanvas, {time=30,delay=100,alpha=.3} )
+            -- transition.to( effectCanvas, {time=300,delay=300,alpha=0} )
+            if oldOnRelease then oldOnRelease( event ) end
+        elseif ( event.phase == "cancelled" ) then
+            -- local x, y = event.target:contentToLocal( event.x, event.y )
+            -- transition.cancel( effectCanvas )
+            -- transition.cancel( effectTransition )
+            -- transition.to( effectCanvas, {time=300,alpha=0} )
+        end
+        if oldOnEvent then oldOnEvent( event ) end
+    end
+
+	-- create button with params using Corona's default API
+	button = oldNewButton( params )
+
+    -- put canvas in button
     effectCanvas.x = button.width*.5
     effectCanvas.y = button.height*.5
     effectCanvas.fill.effect.widthHeight = {button.width,button.height}
+    shortestSide = math.min(button.width,button.height)
     button:insert( effectCanvas )
 
     -- prevent shadows from causing touch
     button:removeEventListener( "touch" )
     local shape = button[1]
-    local effectTransition
     shape:addEventListener( "touch", function( event )
-        if ( event.phase == "began" ) then
-            transition.cancel(effectCanvas)
-            transition.cancel(effectTransition)
-            effectCanvas.alpha = 0
-            effectCanvas.fill.effect.circleRadius = 0
-            local desiredRadius = 200 * 15
-            effectTransition = transition.to( effectCanvas.fill.effect, {time=80000,circleRadius=desiredRadius/shortestSide} )
-            transition.to( effectCanvas, {time=1000,alpha=.3} )
-            local x, y = event.target:contentToLocal( event.x, event.y )
-            effectCanvas.startX, effectCanvas.startY = x, y
-            effectCanvas.fill.effect.xY = {-x,-y}
-        elseif ( event.phase == "moved" ) then
-            local x, y = event.target:contentToLocal( event.x, event.y )
-            effectCanvas.fill.effect.xY = {-(x + effectCanvas.startX)*.5,-(y + effectCanvas.startY)*.5}
-        -- elseif ( event.phase == "ended" ) then
-        --     local x, y = event.target:contentToLocal( event.x, event.y )
-        --     transition.cancel( effectCanvas )
-        --     transition.cancel( effectTransition )
-        --     local desiredRadius = 200 * 15
-        --     effectTransition = transition.to( effectCanvas.fill.effect, {time=3000,circleRadius=desiredRadius/shortestSide} )
-        --     transition.to( effectCanvas, {time=30,alpha=.5} )
-        --     transition.to( effectCanvas, {time=30,delay=100,alpha=.3} )
-        --     transition.to( effectCanvas, {time=300,delay=300,alpha=0} )
-        -- elseif ( event.phase == "cancelled" ) then
-    else
-            local x, y = event.target:contentToLocal( event.x, event.y )
-            transition.cancel( effectCanvas )
-            transition.cancel( effectTransition )
-            transition.to( effectCanvas, {time=300,alpha=0} )
-        end
-        print(event.phase)
         button.touch( button, event )
     end )
 
