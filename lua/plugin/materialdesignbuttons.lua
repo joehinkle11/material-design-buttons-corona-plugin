@@ -15,25 +15,15 @@ shaders.load()
 
 local oldNewButton = widget.newButton
 lib.newButton = function( params )
+	-- create button with params using Corona's default API
+	local button = oldNewButton( params )
+
     -- create material click effect canvas
     local effectCanvas = shapes.new( params )
     effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
     effectCanvas.fill.effect = "filter.materialDesignButtons.button"
     effectCanvas.fill.effect.xY = {0,0}
     effectCanvas.fill.effect.circleRadius = 0
-
-    -- -- animate effect
-    local effectTransition
-    local oldOnEvent = params.onEvent
-    params.onEvent = function( event )
-        effectCanvas.fill.effect.circleRadius = 1
-        if oldOnEvent then oldOnEvent( event ) end
-    end
-
-	-- create button with params using Corona's default API
-	local button = oldNewButton( params )
-
-    -- put the effect into the button
     effectCanvas.x = button.width*.5
     effectCanvas.y = button.height*.5
     effectCanvas.fill.effect.widthHeight = {button.width,button.height}
@@ -43,6 +33,13 @@ lib.newButton = function( params )
     button:removeEventListener( "touch" )
     local shape = button[1]
     shape:addEventListener( "touch", function( event )
+        if ( event.phase == "began" ) then
+            effectCanvas.fill.effect.circleRadius = .5
+        elseif ( event.phase == "moved" ) then
+            effectCanvas.fill.effect.circleRadius = 1
+        elseif ( event.phase == "ended" or event.phase == "cancelled" ) then
+            effectCanvas.fill.effect.circleRadius = 0
+        end
         button.touch( button, event )
     end )
 
