@@ -20,6 +20,7 @@ lib.newButton = function( params )
 
     -- create material click effect canvas
     local effectCanvas = shapes.new( params )
+    local shortestSide = math.min(button.width,button.height)
     effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
     effectCanvas.fill.effect = "filter.materialDesignButtons.button"
     effectCanvas.fill.effect.xY = {0,0}
@@ -32,14 +33,39 @@ lib.newButton = function( params )
     -- prevent shadows from causing touch
     button:removeEventListener( "touch" )
     local shape = button[1]
+    local effectTransition
     shape:addEventListener( "touch", function( event )
         if ( event.phase == "began" ) then
-            effectCanvas.fill.effect.circleRadius = .5
-        elseif ( event.phase == "moved" ) then
-            effectCanvas.fill.effect.circleRadius = 1
-        elseif ( event.phase == "ended" or event.phase == "cancelled" ) then
+            transition.cancel(effectCanvas)
+            transition.cancel(effectTransition)
+            effectCanvas.alpha = 0
             effectCanvas.fill.effect.circleRadius = 0
+            local desiredRadius = 200 * 15
+            effectTransition = transition.to( effectCanvas.fill.effect, {time=80000,circleRadius=desiredRadius/shortestSide} )
+            transition.to( effectCanvas, {time=1000,alpha=.3} )
+            local x, y = event.target:contentToLocal( event.x, event.y )
+            effectCanvas.startX, effectCanvas.startY = x, y
+            effectCanvas.fill.effect.xY = {-x,-y}
+        elseif ( event.phase == "moved" ) then
+            local x, y = event.target:contentToLocal( event.x, event.y )
+            effectCanvas.fill.effect.xY = {-(x + effectCanvas.startX)*.5,-(y + effectCanvas.startY)*.5}
+        -- elseif ( event.phase == "ended" ) then
+        --     local x, y = event.target:contentToLocal( event.x, event.y )
+        --     transition.cancel( effectCanvas )
+        --     transition.cancel( effectTransition )
+        --     local desiredRadius = 200 * 15
+        --     effectTransition = transition.to( effectCanvas.fill.effect, {time=3000,circleRadius=desiredRadius/shortestSide} )
+        --     transition.to( effectCanvas, {time=30,alpha=.5} )
+        --     transition.to( effectCanvas, {time=30,delay=100,alpha=.3} )
+        --     transition.to( effectCanvas, {time=300,delay=300,alpha=0} )
+        -- elseif ( event.phase == "cancelled" ) then
+    else
+            local x, y = event.target:contentToLocal( event.x, event.y )
+            transition.cancel( effectCanvas )
+            transition.cancel( effectTransition )
+            transition.to( effectCanvas, {time=300,alpha=0} )
         end
+        print(event.phase)
         button.touch( button, event )
     end )
 
