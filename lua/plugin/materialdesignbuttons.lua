@@ -19,12 +19,8 @@ lib.newButton = function( params )
     local button
 
     -- create material click effect canvas
-    local effectCanvas = shapes.new( params )
+    local effectCanvas
     local shortestSide
-    effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
-    effectCanvas.fill.effect = "filter.materialDesignButtons.button"
-    effectCanvas.fill.effect.xY = {0,0}
-    effectCanvas.fill.effect.circleRadius = 0
 
     local oldOnRelease = params.onRelease
     local oldOnPress = params.onPress
@@ -68,7 +64,20 @@ lib.newButton = function( params )
 	-- create button with params using Corona's default API
 	button = oldNewButton( params )
 
+    -- defaults for other shapes
+    if params.shape == "circle" then
+        params.radius = params.radius or 50
+    elseif params.shape == "roundedRect" or params.shape == "rect" then
+        params.width = button.width
+        params.height = button.height
+    end
+
     -- put canvas in button
+    effectCanvas = shapes.new( params )
+    effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
+    effectCanvas.fill.effect = "filter.materialDesignButtons.button"
+    effectCanvas.fill.effect.xY = {0,0}
+    effectCanvas.fill.effect.circleRadius = 0
     effectCanvas.x = button.width*.5
     effectCanvas.y = button.height*.5
     effectCanvas.fill.effect.widthHeight = {button.width,button.height}
@@ -134,13 +143,15 @@ lib.newButton = function( params )
 		                shadow2.child:setFillColor( 0,0,0,.4+rawZ*.05 )
                         shadow2.xScale   = .8 + rawZ*.05
                         shadow2.yScale   = .8 + rawZ*.05
-                        shadow2.child.y  = 5.3
 					else
 						oldNewIndex( myTable, key, value )
 					end
 				end
 			} )
-			button.z = params.z or 0
+			button.z = params.z or 3
+            timer.performWithDelay( 15, function()
+                shadow2.child.y  = 5.3
+            end )
 		end
 	end
 	return button

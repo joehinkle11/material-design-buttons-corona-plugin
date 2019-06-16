@@ -38,14 +38,14 @@ bg:setFillColor( 1 )
 
 local button; button = widget.newButton({
 	x = screenCX,
-	y = screenCY - 40,
+	y = screenCY - 120*2,
     shape = "roundedRect",
-	label = "BUTTON",
-    width = 120,
+	label = "MAKE SHADOW",
+    width = 146,
     height = 40,
     font = "Roboto-Medium.ttf",
     cornerRadius = 4,
-    -- z = 10,
+    z = 0,
     onRelease = function ( event )
         print( "onRelease",event )
         -- button.z = button.z + 1
@@ -53,7 +53,7 @@ local button; button = widget.newButton({
     onEvent = function( event )
         -- print( "onEvent", event )
         if event.phase == "ended" then
-            button.z = button.z + 1
+            transition.to( button, { time = 500, transition = easing.inOutQuad, z = 10 } )
         end
     end,
     onPress = function( event )
@@ -64,25 +64,68 @@ local button; button = widget.newButton({
     fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
 })
 
--- button.z = 10
 
 
-local button = widget.newButton({
+local noShadowButton; noShadowButton = widget.newButton({
     x = screenCX,
-    y = screenCY + 40,
+    y = screenCY - 150,
     shape = "roundedRect",
-    label = "BUTTON",
-    width = 120,
+    label = "ROTATE",
+    width = 90,
     height = 40,
     font = "Roboto-Medium.ttf",
     cornerRadius = 4,
+    onRelease = function()
+        transition.to( noShadowButton, { time = 50, transition = easing.inOutQuad, rotation = noShadowButton.rotation + 35 } )
+    end,
     hideShadow = true,
     labelColor = { default={ 1 }, over={ 1 } },
     fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
 })
 
 
-button.z =10
+
+
+local circleButton; circleButton = widget.newButton({
+    x = screenCX,
+    y = screenCY + 0,
+    shape = "circle",
+    label = "CHANGE COLOR",
+    radius = 75,
+    font = "Roboto-Medium.ttf",
+    onRelease = function()
+        circleButton:setFillColor( .85 + math.random( 0, 1 )*.15, .85 + math.random( 0, 1 )*.15, .85 + math.random( 0, 1 )*.15 )
+    end,
+    onPress = function()
+        circleButton:setFillColor( .85 + math.random( 0, 1 )*.15, .85 + math.random( 0, 1 )*.15, .85 + math.random( 0, 1 )*.15 )
+    end,
+    cornerRadius = 4,
+    touchCircleColor = { 0 },
+    labelColor = { default={ 0 }, over={ 0 } },
+    fillColor = { default={.85 + math.random( 0, 1 )*.15, .85 + math.random( 0, 1 )*.15, .85 + math.random( 0, 1 )*.15 }, over={ 1 } },
+})
+
+
+
+local polyButton = widget.newButton({
+    x = screenCX,
+    y = screenCY + 170,
+    shape = "circle",
+    label = "BUTTON",
+    width = 120,
+    height = 40,
+    font = "Roboto-Medium.ttf",
+    cornerRadius = 4,
+    labelColor = { default={ 1 }, over={ 1 } },
+    fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
+})
+
+
+
+
+
+
+
 
 
 
