@@ -74,7 +74,7 @@ lib.newButton = function( params )
 		                shadow2.child:setFillColor( 0,0,0,.4+rawZ*.05 )
 		                shadow2.xScale = .8 + rawZ*.05
 		                shadow2.yScale = .8 + rawZ*.05
-		                -- shadow2.child.y = 5.3
+		                shadow2.child.y = 5.3
 					else
 						oldNewIndex( myTable, key, value )
 					end
