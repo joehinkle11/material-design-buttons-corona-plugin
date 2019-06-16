@@ -49,7 +49,7 @@ local button; button = widget.newButton({
     onRelease = function ()
         button.z = button.z + 1
     end,
-    labelColor = { default={ 1 }, over={ 1 } }, 
+    labelColor = { default={ 1 }, over={ 1 } },
     fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
 })
 
@@ -67,7 +67,7 @@ local button = widget.newButton({
     font = "Roboto-Medium.ttf",
     cornerRadius = 4,
     hideShadow = true,
-    labelColor = { default={ 1 }, over={ 1 } }, 
+    labelColor = { default={ 1 }, over={ 1 } },
     fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
 })
 

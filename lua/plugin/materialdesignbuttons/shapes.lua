@@ -1,5 +1,17 @@
 local shapes = {}
 
+function shapes.new( args )
+	if args.shape == "rect" then
+		return display.newRect( 0, 0, args.width, args.height )
+	elseif args.shape == "roundedRect" then
+		return display.newRoundedRect( 0, 0, args.width, args.height, args.cornerRadius )
+	elseif args.shape == "circle" then
+		return display.newCircle( 0, 0, args.radius )
+	elseif args.shape == "polygon" then
+		return display.newPolygon( 0, 0, args.vertices )
+	end
+end
+
 function shapes.shadow( args )
 	if args.shape == "rect" or args.shape == "roundedRect" then
 		local rect

@@ -18,9 +18,27 @@ lib.newButton = function( params )
 	-- create button with params using Corona's default API
 	local button = oldNewButton( params )
 
+    -- create material click effect canvas
+    local effectCanvas = shapes.new( params )
+    effectCanvas.x     = button.width*.5
+    effectCanvas.y     = button.height*.5
+    effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
+    button:insert( effectCanvas )
+
+    -- prevent shadows from causing touch
+    button:removeEventListener( "touch" )
+    local shape = button[1]
+    shape:addEventListener( "touch", function( event )
+        effectCanvas.fill.effect = "filter.materialDesignButtons.button"
+        effectCanvas.fill.effect.widthHeight = {shape.width,shape.height}
+        effectCanvas.fill.effect.xY = {0,0}
+        effectCanvas.fill.effect.circleRadius = 1.5
+        button.touch( button, event )
+    end )
+
 	-- create shadows based on the result of the button creation
 	if not params.hideShadow then
-		params.width = button.width
+		params.width  = button.width
 		params.height = button.height
 		local shadow1 = shapes.shadow( params )
 		local shadow2 = shapes.shadow( params )
@@ -35,17 +53,11 @@ lib.newButton = function( params )
 			button:insert(shadow2)
 			shadow2:toBack()
 
-            -- prevent shadows from causing touch
-            button:removeEventListener( "touch" )
-            button[button.numChildren-1]:addEventListener( "touch", function( event )
-                button.touch( button, event )
-            end )
-
 			-- position shadows based on the given z position of the button by intercepting the setting of z
-			local oldMetatable = getmetatable(button)
-			local oldIndex = oldMetatable.__index
-			local oldNewIndex = oldMetatable.__newindex
-			local rawZ = 0
+            local oldMetatable = getmetatable(button)
+            local oldIndex     = oldMetatable.__index
+            local oldNewIndex  = oldMetatable.__newindex
+            local rawZ         = 0
 			setmetatable( button, {
 				__index = function( myTable, key )
 					if key == "z" then
@@ -72,11 +84,11 @@ lib.newButton = function( params )
 		                shadow1.xScale = .8 + rawZ*.05
 		                shadow1.yScale = .8 + rawZ*.05
 
-		                local blurAmount = rawZ+.4
+                        local blurAmount = rawZ+.4
 		                shadow2.child:setFillColor( 0,0,0,.4+rawZ*.05 )
-		                shadow2.xScale = .8 + rawZ*.05
-		                shadow2.yScale = .8 + rawZ*.05
-		                shadow2.child.y = 5.3
+                        shadow2.xScale   = .8 + rawZ*.05
+                        shadow2.yScale   = .8 + rawZ*.05
+                        shadow2.child.y  = 5.3
 					else
 						oldNewIndex( myTable, key, value )
 					end
