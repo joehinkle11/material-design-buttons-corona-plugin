@@ -15,24 +15,35 @@ shaders.load()
 
 local oldNewButton = widget.newButton
 lib.newButton = function( params )
+    -- create material click effect canvas
+    -- local effectCanvas = shapes.new( params )
+    -- effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
+    -- effectCanvas.fill.effect = "filter.materialDesignButtons.button"
+    -- effectCanvas.fill.effect.xY = {0,0}
+    -- effectCanvas.fill.effect.circleRadius = 0
+
+    -- -- animate effect
+    -- local effectTransition
+    -- local oldOnEvent = onEvent
+    -- params.onEvent = function( event )
+    --     -- effectCanvas.fill.effect.circleRadius = 1
+    --     print( event )
+    --     if oldOnEvent then oldOnEvent( event ) end
+    -- end
+
 	-- create button with params using Corona's default API
 	local button = oldNewButton( params )
 
-    -- create material click effect canvas
-    local effectCanvas = shapes.new( params )
-    effectCanvas.x     = button.width*.5
-    effectCanvas.y     = button.height*.5
-    effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
-    button:insert( effectCanvas )
+    -- put the effect into the button
+    -- effectCanvas.x = button.width*.5
+    -- effectCanvas.y = button.height*.5
+    -- effectCanvas.fill.effect.widthHeight = {button.width,button.height}
+    -- button:insert( effectCanvas )
 
     -- prevent shadows from causing touch
     button:removeEventListener( "touch" )
     local shape = button[1]
     shape:addEventListener( "touch", function( event )
-        effectCanvas.fill.effect = "filter.materialDesignButtons.button"
-        effectCanvas.fill.effect.widthHeight = {shape.width,shape.height}
-        effectCanvas.fill.effect.xY = {0,0}
-        effectCanvas.fill.effect.circleRadius = 1.5
         button.touch( button, event )
     end )
 
@@ -79,12 +90,10 @@ lib.newButton = function( params )
 		                shadow2.xScale = ((1 + rawZ*.035) + myTable.xScale)*.5
 		                shadow2.yScale = ((1 + rawZ*.035) + myTable.xScale)*.5
 
-                        local blurAmount = 5+(rawZ)*5
 		                shadow1.child:setFillColor( 0,0,0,.2+rawZ*.01)
 		                shadow1.xScale = .8 + rawZ*.05
 		                shadow1.yScale = .8 + rawZ*.05
 
-                        local blurAmount = rawZ+.4
 		                shadow2.child:setFillColor( 0,0,0,.4+rawZ*.05 )
                         shadow2.xScale   = .8 + rawZ*.05
                         shadow2.yScale   = .8 + rawZ*.05
