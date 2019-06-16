@@ -50,7 +50,9 @@ local button = widget.newButton({
 })
 
 
+button.z =10
 
+display.newRect( 0, 0, 10, 10 ).z = 50
 
 
 
