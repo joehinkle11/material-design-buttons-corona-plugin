@@ -16,29 +16,28 @@ shaders.load()
 local oldNewButton = widget.newButton
 lib.newButton = function( params )
     -- create material click effect canvas
-    -- local effectCanvas = shapes.new( params )
-    -- effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
-    -- effectCanvas.fill.effect = "filter.materialDesignButtons.button"
-    -- effectCanvas.fill.effect.xY = {0,0}
-    -- effectCanvas.fill.effect.circleRadius = 0
+    local effectCanvas = shapes.new( params )
+    effectCanvas:setFillColor( unpack( params.touchCircleColor or {1} ) )
+    effectCanvas.fill.effect = "filter.materialDesignButtons.button"
+    effectCanvas.fill.effect.xY = {0,0}
+    effectCanvas.fill.effect.circleRadius = 0
 
     -- -- animate effect
-    -- local effectTransition
-    -- local oldOnEvent = onEvent
-    -- params.onEvent = function( event )
-    --     -- effectCanvas.fill.effect.circleRadius = 1
-    --     print( event )
-    --     if oldOnEvent then oldOnEvent( event ) end
-    -- end
+    local effectTransition
+    local oldOnEvent = params.onEvent
+    params.onEvent = function( event )
+        effectCanvas.fill.effect.circleRadius = 1
+        if oldOnEvent then oldOnEvent( event ) end
+    end
 
 	-- create button with params using Corona's default API
 	local button = oldNewButton( params )
 
     -- put the effect into the button
-    -- effectCanvas.x = button.width*.5
-    -- effectCanvas.y = button.height*.5
-    -- effectCanvas.fill.effect.widthHeight = {button.width,button.height}
-    -- button:insert( effectCanvas )
+    effectCanvas.x = button.width*.5
+    effectCanvas.y = button.height*.5
+    effectCanvas.fill.effect.widthHeight = {button.width,button.height}
+    button:insert( effectCanvas )
 
     -- prevent shadows from causing touch
     button:removeEventListener( "touch" )
