@@ -45,16 +45,16 @@ local button; button = widget.newButton({
     height = 40,
     font = "Roboto-Medium.ttf",
     cornerRadius = 4,
+    -- z = 10,
     onRelease = function ()
         button.z = button.z + 1
-        print(button.z)
     end,
     labelColor = { default={ 1 }, over={ 1 } }, 
     fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
 })
 
 
-button.z = 1
+-- button.z = 10
 
 
 local button = widget.newButton({

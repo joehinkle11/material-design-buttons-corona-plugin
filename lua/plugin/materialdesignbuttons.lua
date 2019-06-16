@@ -33,6 +33,12 @@ lib.newButton = function( params )
 			button:insert(shadow2)
 			shadow2:toBack()
 
+            -- prevent shadows from causing touch
+            button:removeEventListener( "touch" )
+            button[button.numChildren-1]:addEventListener( "touch", function( event )
+                button.touch( button, event )
+            end )
+
 			-- position shadows based on the given z position of the button by intercepting the setting of z
 			local oldMetatable = getmetatable(button)
 			local oldIndex = oldMetatable.__index
@@ -68,13 +74,13 @@ lib.newButton = function( params )
 		                shadow2.child:setFillColor( 0,0,0,.4+rawZ*.05 )
 		                shadow2.xScale = .8 + rawZ*.05
 		                shadow2.yScale = .8 + rawZ*.05
-		                shadow2.child.y = 5.3
+		                -- shadow2.child.y = 5.3
 					else
 						oldNewIndex( myTable, key, value )
 					end
 				end
 			} )
-			button.z = 0
+			button.z = params.z or 0
 		end
 	end
 	return button
