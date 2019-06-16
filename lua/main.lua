@@ -46,7 +46,6 @@ local button; button = widget.newButton({
     font = "Roboto-Medium.ttf",
     cornerRadius = 4,
     onRelease = function ()
-        print(button.z)
         button.z = button.z + 1
         print(button.z)
     end,

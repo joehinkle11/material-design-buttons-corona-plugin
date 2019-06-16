@@ -27,7 +27,7 @@ lib.newButton = function( params )
 			shadow1.x = button.width*.5
 			shadow1.y = button.height*.5
 			shadow2.x = button.width*.5
-			shadow2.y = button.height*.5 + 5.2
+			shadow2.y = button.height*.5
 			button:insert(shadow1)
 			shadow1:toBack()
 			button:insert(shadow2)
@@ -47,7 +47,6 @@ lib.newButton = function( params )
 					end
 				end,
 				__newindex = function( myTable, key, value )
-					print("go")
 					if key == "z" then
 						print("z set to: "..tostring(value))
 						rawZ = math.min(7,math.max(value,0))
@@ -60,12 +59,16 @@ lib.newButton = function( params )
 		                shadow2.xScale = ((1 + rawZ*.035) + myTable.xScale)*.5
 		                shadow2.yScale = ((1 + rawZ*.035) + myTable.xScale)*.5
 
-		                -- print("here")
-		                -- print(myTable[key])
-		                -- print(getmetatable( myTable ).__newindex)
-		                -- rawset( myTable, key, rawZ )
-		                -- print(getmetatable( myTable ).__newindex)
-		                -- print(myTable[key])
+                        local blurAmount = 5+(rawZ)*5
+		                shadow1.child:setFillColor( 0,0,0,.2+rawZ*.01)
+		                shadow1.xScale = .8 + rawZ*.05
+		                shadow1.yScale = .8 + rawZ*.05
+
+		                local blurAmount = rawZ+.4
+		                shadow2.child:setFillColor( 0,0,0,.4+rawZ*.05 )
+		                shadow2.xScale = .8 + rawZ*.05
+		                shadow2.yScale = .8 + rawZ*.05
+		                shadow2.child.y = 5.3
 					else
 						oldNewIndex( myTable, key, value )
 					end
