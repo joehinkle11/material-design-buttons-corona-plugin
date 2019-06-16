@@ -3,7 +3,7 @@ local shaders = {}
 function shaders.load()
 	local kernel = {}
 	kernel.category = "filter"
-	kernel.group = "coronaMaterial"
+	kernel.group = "materialDesignButtons"
 	kernel.name = "button"
 	 
 	kernel.fragment =

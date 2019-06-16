@@ -6,6 +6,8 @@ local lib = Library:new{ name='materialdesignbuttons', publisherId='io.joehinkle
 local widget = require "widget"
 
 local shapes = require "plugin.materialdesignbuttons.shapes"
+local shaders = require("plugin.materialdesignbuttons.shaders")
+shaders.load()
 
 -------------------------------------------------------------------------------
 -- BEGIN (Insert your implementation starting here)
