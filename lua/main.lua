@@ -40,24 +40,14 @@ local button; button = widget.newButton({
 	x = screenCX,
 	y = screenCY - 120*2,
     shape = "roundedRect",
-	label = "MAKE SHADOW",
-    width = 146,
+	label = "CORONA BUTTON",
+    width = 156,
     height = 40,
     font = "Roboto-Medium.ttf",
     cornerRadius = 4,
     z = 0,
     onRelease = function ( event )
-        print( "onRelease",event )
-        -- button.z = button.z + 1
-    end,
-    onEvent = function( event )
-        -- print( "onEvent", event )
-        if event.phase == "ended" then
-            transition.to( button, { time = 500, transition = easing.inOutQuad, z = 3 } )
-        end
-    end,
-    onPress = function( event )
-        print( "onPress",event )
+        transition.to( button, { time = 500, transition = easing.inOutQuad, z = 3 } )
     end,
     -- hideShadow = true,
     labelColor = { default={ 1 }, over={ 1 } },
