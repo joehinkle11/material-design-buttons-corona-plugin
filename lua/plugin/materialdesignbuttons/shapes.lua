@@ -36,6 +36,11 @@ function shapes.shadow( args )
 		group.child = circle
 		group:insert(group.child)
 		return group
+	elseif args.shape == "polygon" then
+		local group = display.newGroup()
+		group.child = display.newPolygon( 0, 0, args.vertices )
+		group:insert(group.child)
+		return group
 	end
 end
 

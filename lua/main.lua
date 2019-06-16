@@ -53,7 +53,7 @@ local button; button = widget.newButton({
     onEvent = function( event )
         -- print( "onEvent", event )
         if event.phase == "ended" then
-            transition.to( button, { time = 500, transition = easing.inOutQuad, z = 10 } )
+            transition.to( button, { time = 500, transition = easing.inOutQuad, z = 3 } )
         end
     end,
     onPress = function( event )
@@ -68,7 +68,7 @@ local button; button = widget.newButton({
 
 local noShadowButton; noShadowButton = widget.newButton({
     x = screenCX,
-    y = screenCY - 150,
+    y = screenCY - 165,
     shape = "roundedRect",
     label = "ROTATE",
     width = 90,
@@ -86,9 +86,24 @@ local noShadowButton; noShadowButton = widget.newButton({
 
 
 
+local polyButton = widget.newButton({
+    x = screenCX,
+    y = screenCY - 10,
+    shape = "polygon",
+    label = "POLYGONS WORK\n     BECAUSE OF\nCUSTOM SHADER",
+    width = 120,
+    height = 40,
+    vertices = { 0,-110, 27,-35, 105,-35, 43,16, 65,90, 0,45, -65,90, -43,15, -105,-35, -27,-35, },
+    font = "Roboto-Medium.ttf",
+    fontSize = 12,
+    touchCircleColor = { 0 },
+    labelColor = { default={ 0 }, over={ 0 } },
+    fillColor = { default={.85, 1, .85 }, over={ .65, .85, .65  } },
+})
+
 local circleButton; circleButton = widget.newButton({
     x = screenCX,
-    y = screenCY + 0,
+    y = screenCY + 190,
     shape = "circle",
     label = "CHANGE COLOR",
     radius = 75,
@@ -103,21 +118,6 @@ local circleButton; circleButton = widget.newButton({
     touchCircleColor = { 0 },
     labelColor = { default={ 0 }, over={ 0 } },
     fillColor = { default={.85 + math.random( 0, 1 )*.15, .85 + math.random( 0, 1 )*.15, .85 + math.random( 0, 1 )*.15 }, over={ 1 } },
-})
-
-
-
-local polyButton = widget.newButton({
-    x = screenCX,
-    y = screenCY + 170,
-    shape = "circle",
-    label = "BUTTON",
-    width = 120,
-    height = 40,
-    font = "Roboto-Medium.ttf",
-    cornerRadius = 4,
-    labelColor = { default={ 1 }, over={ 1 } },
-    fillColor = { default={87 / 255,   29 / 255,  229 / 255 }, over={127 / 255,   69 / 255,  269 / 255 } },
 })
 
 
