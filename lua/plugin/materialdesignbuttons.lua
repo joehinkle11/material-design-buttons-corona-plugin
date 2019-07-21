@@ -59,6 +59,7 @@ lib.newButton = function( params )
             transition.to( effectCanvas, {time=300,alpha=0} )
         end
         if oldOnEvent then oldOnEvent( event ) end
+        return true
     end
 
 	-- create button with params using Corona's default API
@@ -90,7 +91,7 @@ lib.newButton = function( params )
     button:removeEventListener( "touch" )
     local shape = button[1]
     shape:addEventListener( "touch", function( event )
-        button.touch( button, event )
+        return button.touch( button, event )
     end )
 
 	-- create shadows based on the result of the button creation
