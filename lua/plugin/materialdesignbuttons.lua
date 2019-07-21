@@ -146,7 +146,7 @@ lib.newButton = function( params )
                         shadow2.xScale   = .8 + rawZ*.05
                         shadow2.yScale   = .8 + rawZ*.05
                     else
-                        oldNewIndex( myTable, key, value )
+                        return oldNewIndex( myTable, key, value )
                     end
                 end
             } )
