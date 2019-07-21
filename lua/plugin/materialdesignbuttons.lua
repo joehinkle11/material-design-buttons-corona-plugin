@@ -43,7 +43,7 @@ lib.newButton = function( params )
             if oldOnPress then oldOnPress( event ) end
         elseif ( event.phase == "moved" ) then
             local x, y = effectCanvas:contentToLocal( event.x, event.y )
-            effectCanvas.fill.effect.xY = {-(x + effectCanvas.startX)*.5,-(y + effectCanvas.startY)*.5}
+            effectCanvas.fill.effect.xY = {-(x + (effectCanvas.startX or 0))*.5,-(y + (effectCanvas.startY or 0))*.5}
         elseif ( event.phase == "ended" ) then
             transition.cancel( effectCanvas )
             transition.cancel( effectTransition )
@@ -62,8 +62,8 @@ lib.newButton = function( params )
         return true
     end
 
-	-- create button with params using Corona's default API
-	button = oldNewButton( params )
+    -- create button with params using Corona's default API
+    button = oldNewButton( params )
 
     -- defaults for other shapes
     if params.shape == "circle" then
@@ -94,73 +94,73 @@ lib.newButton = function( params )
         return button.touch( button, event )
     end )
 
-	-- create shadows based on the result of the button creation
-	if not params.hideShadow then
-		params.width  = button.width
-		params.height = button.height
-		local shadow1 = shapes.shadow( params )
-		local shadow2 = shapes.shadow( params )
-		if shadow1 and shadow2 then
-			-- if shadows were created, then put them inside the button
-			shadow1.x = button.width*.5
-			shadow1.y = button.height*.5
-			shadow2.x = button.width*.5
-			shadow2.y = button.height*.5
-			button:insert(shadow1)
-			shadow1:toBack()
-			button:insert(shadow2)
-			shadow2:toBack()
+    -- create shadows based on the result of the button creation
+    if not params.hideShadow then
+        params.width  = button.width
+        params.height = button.height
+        local shadow1 = shapes.shadow( params )
+        local shadow2 = shapes.shadow( params )
+        if shadow1 and shadow2 then
+            -- if shadows were created, then put them inside the button
+            shadow1.x = button.width*.5
+            shadow1.y = button.height*.5
+            shadow2.x = button.width*.5
+            shadow2.y = button.height*.5
+            button:insert(shadow1)
+            shadow1:toBack()
+            button:insert(shadow2)
+            shadow2:toBack()
 
-			-- position shadows based on the given z position of the button by intercepting the setting of z
+            -- position shadows based on the given z position of the button by intercepting the setting of z
             local oldMetatable = getmetatable(button)
             local oldIndex     = oldMetatable.__index
             local oldNewIndex  = oldMetatable.__newindex
             local rawZ         = 0
-			setmetatable( button, {
-				__index = function( myTable, key )
-					if key == "z" then
+            setmetatable( button, {
+                __index = function( myTable, key )
+                    if key == "z" then
                         return rawZ
                     elseif key == "contentBounds" then
                         return shape.contentBounds
                     else
-						return oldIndex( myTable, key )
-					end
-				end,
-				__newindex = function( myTable, key, value )
-					if key == "z" then
-						rawZ = math.min(7,math.max(value,0))
-			            if rawZ ~= value then
-			                print( "Warning: material design buttons can only have a z value from 0 to 7. You tried to set the z value to "..value )
-			            end
+                        return oldIndex( myTable, key )
+                    end
+                end,
+                __newindex = function( myTable, key, value )
+                    if key == "z" then
+                        rawZ = math.min(7,math.max(value,0))
+                        if rawZ ~= value then
+                            print( "Warning: material design buttons can only have a z value from 0 to 7. You tried to set the z value to "..value )
+                        end
 
-		                shadow1.xScale = ((1 + rawZ*.035) + myTable.xScale)*.5
-		                shadow1.yScale = ((1 + rawZ*.035) + myTable.xScale)*.5
-		                shadow2.xScale = ((1 + rawZ*.035) + myTable.xScale)*.5
-		                shadow2.yScale = ((1 + rawZ*.035) + myTable.xScale)*.5
+                        shadow1.xScale = ((1 + rawZ*.035) + myTable.xScale)*.5
+                        shadow1.yScale = ((1 + rawZ*.035) + myTable.xScale)*.5
+                        shadow2.xScale = ((1 + rawZ*.035) + myTable.xScale)*.5
+                        shadow2.yScale = ((1 + rawZ*.035) + myTable.xScale)*.5
 
-		                shadow1.child:setFillColor( 0,0,0,.2+rawZ*.01)
-		                shadow1.xScale = .8 + rawZ*.05
-		                shadow1.yScale = .8 + rawZ*.05
+                        shadow1.child:setFillColor( 0,0,0,.2+rawZ*.01)
+                        shadow1.xScale = .8 + rawZ*.05
+                        shadow1.yScale = .8 + rawZ*.05
 
-		                shadow2.child:setFillColor( 0,0,0,.4+rawZ*.05 )
+                        shadow2.child:setFillColor( 0,0,0,.4+rawZ*.05 )
                         shadow2.xScale   = .8 + rawZ*.05
                         shadow2.yScale   = .8 + rawZ*.05
-					else
-						oldNewIndex( myTable, key, value )
-					end
-				end
-			} )
-			button.z = params.z or 3
+                    else
+                        oldNewIndex( myTable, key, value )
+                    end
+                end
+            } )
+            button.z = params.z or 3
             timer.performWithDelay( 15, function()
                 shadow2.child.y  = 5.3
             end )
-		end
-	end
-	return button
+        end
+    end
+    return button
 end
 
 lib.initHooks = function()
-	widget.newButton = lib.newButton
+    widget.newButton = lib.newButton
 end
 -------------------------------------------------------------------------------
 -- END
