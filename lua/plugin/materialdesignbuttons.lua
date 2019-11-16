@@ -1,7 +1,7 @@
 local Library = require "CoronaLibrary"
 
 -- Create library
-local lib = Library:new{ name='materialdesignbuttons', publisherId='io.joehinkle.materialdesignbuttons' }
+local lib = Library:new{ name='materialdesignbuttons', publisherId='io.joehinkle' }
 
 local widget = require "widget"
 
